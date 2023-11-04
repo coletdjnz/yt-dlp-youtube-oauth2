@@ -10,7 +10,7 @@ Requires yt-dlp `2023.10.13` or above.
 
 You can install this package with pip:
 ```
-python3 -m pip install -U https://github.com/coletdjnz/yt-dlp-youtube-oauth2/archive/master.zip
+python3 -m pip install -U https://github.com/coletdjnz/yt-dlp-youtube-oauth2/archive/refs/heads/master.zip
 ```
 
 See [installing yt-dlp plugins](https://github.com/yt-dlp/yt-dlp#installing-plugins) for the other methods this plugin package can be installed.
