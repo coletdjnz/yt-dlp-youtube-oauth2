@@ -20,17 +20,17 @@ YOUTUBE_IES = filter(
 # TODO: dynamically extract these
 _CLIENT_ID = '861556708454-d6dlm3lh05idd8npek18k6be8ba3oc68.apps.googleusercontent.com'
 _CLIENT_SECRET = 'SboVhoG9s0rNafixCSGGKXAT'
-_SCOPES = 'http://gdata.youtube.com https://www.googleapis.com/auth/youtube-paid-content'
+_SCOPES = 'http://gdata.youtube.com https://www.googleapis.com/auth/youtube'
 
 
-class YouTubeOAuthHandler(InfoExtractor):
+class YouTubeOAuth2Handler(InfoExtractor):
     def store_token(self, token_data):
-        self.cache.store('youtube-oauth', 'token_data', token_data)
+        self.cache.store('youtube-oauth2', 'token_data', token_data)
         self._TOKEN_DATA = token_data
 
     def get_token(self):
         if not getattr(self, '_TOKEN_DATA', None):
-            self._TOKEN_DATA = self.cache.load('youtube-oauth', 'token_data')
+            self._TOKEN_DATA = self.cache.load('youtube-oauth2', 'token_data')
         return self._TOKEN_DATA
 
     def validate_token_data(self, token_data):
@@ -49,7 +49,7 @@ class YouTubeOAuthHandler(InfoExtractor):
             self.store_token(token_data)
 
         if token_data['expires'] < datetime.datetime.now(datetime.timezone.utc).timestamp() + 60:
-            self.to_screen('OAuth2 token expired, refreshing')
+            self.to_screen('Access token expired, refreshing')
             token_data = self.refresh_token(token_data['refresh_token'])
             self.store_token(token_data)
 
@@ -59,7 +59,7 @@ class YouTubeOAuthHandler(InfoExtractor):
         # In case user tries to use cookies at the same time
         if 'Authorization' in request.headers:
             self.report_warning(
-                'Youtube cookies have been provided, but oauth2 is being used.'
+                'Youtube cookies have been provided, but OAuth2 is being used.'
                 ' If you encounter problems, stop providing Youtube cookies to yt-dlp.')
             request.headers.pop('Authorization', None)
             request.headers.pop('X-Origin', None)
@@ -73,7 +73,7 @@ class YouTubeOAuthHandler(InfoExtractor):
     def refresh_token(self, refresh_token):
         token_response = self._download_json(
             'https://www.youtube.com/o/oauth2/token',
-            video_id='oauth',
+            video_id='oauth2',
             note='Refreshing OAuth2 Token',
             data=json.dumps({
                 'client_id': _CLIENT_ID,
@@ -97,8 +97,8 @@ class YouTubeOAuthHandler(InfoExtractor):
     def authorize(self):
         code_response = self._download_json(
             'https://www.youtube.com/o/oauth2/device/code',
-            video_id='oauth',
-            note='Fetching OAuth2 Device Code',
+            video_id='oauth2',
+            note='Initializing OAuth2 Authorization Flow',
             data=json.dumps({
                 'client_id': _CLIENT_ID,
                 'scope': _SCOPES,
@@ -109,12 +109,12 @@ class YouTubeOAuthHandler(InfoExtractor):
 
         verification_url = code_response['verification_url']
         user_code = code_response['user_code']
-        self.to_screen(f'Please visit  {verification_url}  and enter code {user_code}')
+        self.to_screen(f'To give yt-dlp access to your account, go to  {verification_url}  and enter code {user_code}')
 
         while True:
             token_response = self._download_json(
                 'https://www.youtube.com/o/oauth2/token',
-                video_id='oauth',
+                video_id='oauth2',
                 note=False,
                 data=json.dumps({
                     'client_id': _CLIENT_ID,
@@ -133,7 +133,9 @@ class YouTubeOAuthHandler(InfoExtractor):
                     self.report_warning('The device code has expired, restarting authorization flow')
                     return self.authorize()
                 else:
-                    raise ExtractorError(f'Unknown OAuth2 Error: {error}')
+                    raise ExtractorError(f'Unhandled OAuth2 Error: {error}')
+
+            self.to_screen('Authorization successful')
             return {
                 'access_token': token_response['access_token'],
                 'expires': datetime.datetime.now(datetime.timezone.utc).timestamp() + token_response['expires_in'],
@@ -143,18 +145,18 @@ class YouTubeOAuthHandler(InfoExtractor):
 
 
 for _, ie in YOUTUBE_IES:
-    class _YouTubeOAuth(ie, YouTubeOAuthHandler, plugin_name='oauth'):
+    class _YouTubeOAuth(ie, YouTubeOAuth2Handler, plugin_name='oauth2'):
         def _create_request(self, *args, **kwargs):
             request = super()._create_request(*args, **kwargs)
             if '__youtube_oauth__' in request.headers:
                 request.headers.pop('__youtube_oauth__')
-            elif self._configuration_arg('oauth', ie_key=YoutubeIE.ie_key()):
+            elif self._configuration_arg('use_oauth2', ie_key=YoutubeIE.ie_key()):
                 self.handle_oauth(request)
             return request
 
         @property
         def is_authenticated(self):
-            if self._configuration_arg('oauth', ie_key=YoutubeIE.ie_key()):
+            if self._configuration_arg('use_oauth2', ie_key=YoutubeIE.ie_key()):
                 token_data = self.get_token()
                 return token_data and self.validate_token_data(token_data)
             return super().is_authenticated
