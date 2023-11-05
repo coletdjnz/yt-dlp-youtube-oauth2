@@ -20,7 +20,7 @@ See [installing yt-dlp plugins](https://github.com/yt-dlp/yt-dlp#installing-plug
 Enable oauth with `--extractor-args youtube:use_oauth2`.
 
 On first run you will be prompted to authorize yt-dlp to access your YouTube account.
-> [youtube+oauth] Please visit  https://www.google.com/device  and enter code XXXX-YYYY
+> [youtube+oauth2] To give yt-dlp access to your account, go to  https://www.google.com/device  and enter code XXX-YYY-ZZZ
 
 Open the link in your browser and enter the code. It will say the request is for YouTube on TV - this is normal, as we are using the YouTube on TV client for oauth ;)
 
