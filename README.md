@@ -17,7 +17,7 @@ See [installing yt-dlp plugins](https://github.com/yt-dlp/yt-dlp#installing-plug
 
 ## Usage
 
-Enable oauth with `--extractor-args youtube:oauth`.
+Enable oauth with `--extractor-args youtube:use_oauth2`.
 
 On first run you will be prompted to authorize yt-dlp to access your YouTube account.
 > [youtube+oauth] Please visit  https://www.google.com/device  and enter code XXXX-YYYY
