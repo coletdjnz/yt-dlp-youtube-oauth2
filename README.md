@@ -13,11 +13,17 @@ You can install this package with pip:
 python3 -m pip install -U https://github.com/coletdjnz/yt-dlp-youtube-oauth2/archive/refs/heads/master.zip
 ```
 
+or with `pipx`:
+
+```
+pipx inject yt-dlp https://github.com/coletdjnz/yt-dlp-youtube-oauth2/archive/refs/heads/master.zip
+```
+
 See [installing yt-dlp plugins](https://github.com/yt-dlp/yt-dlp#installing-plugins) for the other methods this plugin package can be installed.
 
 ## Usage
 
-Enable oauth with `--extractor-args youtube:use_oauth2`.
+Enable oauth with `--username oauth2 password ''`.
 
 On first run you will be prompted to authorize yt-dlp to access your YouTube account.
 > [youtube+oauth2] To give yt-dlp access to your account, go to  https://www.google.com/device  and enter code XXX-YYY-ZZZ

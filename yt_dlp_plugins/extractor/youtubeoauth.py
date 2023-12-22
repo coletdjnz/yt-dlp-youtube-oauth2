@@ -7,7 +7,7 @@ import yt_dlp.networking
 from yt_dlp.utils import ExtractorError
 from yt_dlp.utils.traversal import traverse_obj
 from yt_dlp.extractor.common import InfoExtractor
-from yt_dlp.extractor.youtube import YoutubeBaseInfoExtractor, YoutubeIE
+from yt_dlp.extractor.youtube import YoutubeBaseInfoExtractor
 import importlib
 import inspect
 
@@ -36,8 +36,7 @@ class YouTubeOAuth2Handler(InfoExtractor):
     def validate_token_data(self, token_data):
         return all(key in token_data for key in ('access_token', 'expires', 'refresh_token', 'token_type'))
 
-    def handle_oauth(self, request: yt_dlp.networking.Request):
-
+    def initialize_oauth(self):
         token_data = self.get_token()
 
         if token_data and not self.validate_token_data(token_data):
@@ -53,6 +52,10 @@ class YouTubeOAuth2Handler(InfoExtractor):
             token_data = self.refresh_token(token_data['refresh_token'])
             self.store_token(token_data)
 
+        return token_data
+
+    def handle_oauth(self, request: yt_dlp.networking.Request):
+        token_data = self.initialize_oauth()
         # These are only require for cookies and interfere with OAuth2
         request.headers.pop('X-Goog-PageId', None)
         request.headers.pop('X-Goog-AuthUser', None)
@@ -109,7 +112,7 @@ class YouTubeOAuth2Handler(InfoExtractor):
 
         verification_url = code_response['verification_url']
         user_code = code_response['user_code']
-        self.to_screen(f'To give yt-dlp access to your account, go to  {verification_url}  and enter code {user_code}')
+        self.to_screen(f'To give yt-dlp access to your account, go to  {verification_url}  and enter code  {user_code}')
 
         while True:
             token_response = self._download_json(
@@ -146,17 +149,25 @@ class YouTubeOAuth2Handler(InfoExtractor):
 
 for _, ie in YOUTUBE_IES:
     class _YouTubeOAuth(ie, YouTubeOAuth2Handler, plugin_name='oauth2'):
+        _NETRC_MACHINE = 'youtube'
+        _use_oauth2 = False
+
+        def _perform_login(self, username, password):
+            if username == 'oauth2':
+                self._use_oauth2 = True
+                self.initialize_oauth()
+
         def _create_request(self, *args, **kwargs):
             request = super()._create_request(*args, **kwargs)
             if '__youtube_oauth__' in request.headers:
                 request.headers.pop('__youtube_oauth__')
-            elif self._configuration_arg('use_oauth2', ie_key=YoutubeIE.ie_key()):
+            elif self._use_oauth2:
                 self.handle_oauth(request)
             return request
 
         @property
         def is_authenticated(self):
-            if self._configuration_arg('use_oauth2', ie_key=YoutubeIE.ie_key()):
+            if self._use_oauth2:
                 token_data = self.get_token()
                 return token_data and self.validate_token_data(token_data)
             return super().is_authenticated
