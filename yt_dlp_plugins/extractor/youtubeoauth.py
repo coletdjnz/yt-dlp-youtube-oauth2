@@ -1,6 +1,7 @@
 import datetime
 import json
 import time
+import urllib.parse
 import uuid
 
 import yt_dlp.networking
@@ -55,6 +56,10 @@ class YouTubeOAuth2Handler(InfoExtractor):
         return token_data
 
     def handle_oauth(self, request: yt_dlp.networking.Request):
+
+        if not urllib.parse.urlparse(request.url).netloc.endswith('youtube.com'):
+            return
+
         token_data = self.initialize_oauth()
         # These are only require for cookies and interfere with OAuth2
         request.headers.pop('X-Goog-PageId', None)

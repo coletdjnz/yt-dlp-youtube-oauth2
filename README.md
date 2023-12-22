@@ -2,7 +2,7 @@
 
 This repository contains a plugin package that adds support for logging into YouTube with OAuth2 to [yt-dlp's](https://github.com/yt-dlp/yt-dlp#readme) YouTube Extractors. 
 
-Please note: This is experimental and may break at any time.
+Please note: **!!This is experimental and may break at any time!!**.
 
 ## Installation
 
