@@ -98,8 +98,8 @@ class YouTubeOAuth2Handler(InfoExtractor):
         return {
             'access_token': token_response['access_token'],
             'expires': datetime.datetime.now(datetime.timezone.utc).timestamp() + token_response['expires_in'],
-            'refresh_token': token_response['refresh_token'],
-            'token_type': token_response['token_type']
+            'token_type': token_response['token_type'],
+            'refresh_token': token_response.get('refresh_token', refresh_token)
         }
 
     def authorize(self):
