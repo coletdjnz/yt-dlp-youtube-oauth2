@@ -29,7 +29,7 @@ Enable logging in with OAuth2 with `--username oauth2 --password ''`.
 
 Alternatively, if you only want to apply this for the YouTube extractor, you can add the following to a [.netrc file](https://github.com/yt-dlp/yt-dlp?tab=readme-ov-file#authentication-with-netrc):
  ```
-machine youtube login oauth2
+machine youtube login oauth2 password ""
 ```
 
 ### Logging in 
