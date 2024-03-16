@@ -2,29 +2,37 @@
 
 This repository contains a plugin package that adds support for logging into YouTube with OAuth2 to [yt-dlp's](https://github.com/yt-dlp/yt-dlp#readme) YouTube Extractors. 
 
-Please note: **!!This is experimental and may break at any time!!**.
+Please note: **This is experimental and may break at any time!!**.
 
 ## Installation
 
 Requires yt-dlp `2023.10.13` or above.
 
-You can install this package with pip:
+If yt-dlp is installed through `pip` or `pipx`, you can install the plugin with the following:
+
+pip:
 ```
 python3 -m pip install -U https://github.com/coletdjnz/yt-dlp-youtube-oauth2/archive/refs/heads/master.zip
 ```
 
-or with `pipx`:
-
+pipx:
 ```
 pipx inject yt-dlp https://github.com/coletdjnz/yt-dlp-youtube-oauth2/archive/refs/heads/master.zip
 ```
 
-See [installing yt-dlp plugins](https://github.com/yt-dlp/yt-dlp#installing-plugins) for the other methods this plugin package can be installed.
+If you have not installed yt-dlp through pip or pipx, see [installing yt-dlp plugins](https://github.com/yt-dlp/yt-dlp#installing-plugins) for the other methods this plugin package can be installed.
 
 ## Usage
 
-Enable oauth with `--username oauth2 --password ''`.
+### Enabling
+Enable logging in with OAuth2 with `--username oauth2 --password ''`.
 
+Alternatively, if you only want to apply this for the YouTube extractor, you can add the following to a [.netrc file](https://github.com/yt-dlp/yt-dlp?tab=readme-ov-file#authentication-with-netrc):
+ ```
+machine youtube login oauth2
+```
+
+### Logging in 
 On first run you will be prompted to authorize yt-dlp to access your YouTube account.
 > [youtube+oauth2] To give yt-dlp access to your account, go to  https://www.google.com/device  and enter code XXX-YYY-ZZZ
 
