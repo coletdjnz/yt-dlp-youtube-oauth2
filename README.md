@@ -4,6 +4,8 @@ This repository contains a plugin package that adds support for logging into You
 
 Please note: **This is experimental and may break at any time!!**.
 
+For general plugin support, please see the yt-dlp discord server as responses may be slow here.
+
 ## Installation
 
 Requires yt-dlp `2023.10.13` or above.
@@ -25,7 +27,7 @@ If you have not installed yt-dlp through pip or pipx, see [installing yt-dlp plu
 ## Usage
 
 ### Enabling
-Enable logging in with OAuth2 with `--username oauth2 --password ''`.
+Enable logging in with OAuth2 with `--username oauth2 --password ''`. You can add this to your [yt-dlp config file](https://github.com/yt-dlp/yt-dlp?tab=readme-ov-file#configuration)
 
 Alternatively, if you only want to apply this for the YouTube extractor, you can add the following to a [.netrc file](https://github.com/yt-dlp/yt-dlp?tab=readme-ov-file#authentication-with-netrc):
  ```
@@ -39,5 +41,7 @@ On first run you will be prompted to authorize yt-dlp to access your YouTube acc
 Open the link in your browser and enter the code. It will say the request is for YouTube on TV - this is normal, as we are using the YouTube on TV client for oauth ;)
 
 The token data is saved in the yt-dlp cache.
+
+If you encounter issues, run yt-dlp with verbose logging (`-v`). If you see `Loading youtube-oauth2.token_data from cache`, then it should be trying to use oauth.
 
 Note: avoid running with YouTube cookies, as it may cause issues.
