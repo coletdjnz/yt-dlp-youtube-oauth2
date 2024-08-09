@@ -25,6 +25,53 @@ _SCOPES = 'http://gdata.youtube.com https://www.googleapis.com/auth/youtube'
 
 
 class YouTubeOAuth2Handler(InfoExtractor):
+    def __init__(self):
+        super().__init__()
+        self._CLIENT_ID = None
+        self._CLIENT_SECRET = None
+        self._SCOPES = None
+
+    def _extract_oauth_credentials(self):
+        if self._CLIENT_ID and self._CLIENT_SECRET and self._SCOPES:
+            return
+
+        # Download the YouTube TV web page
+        webpage = self._download_webpage(
+            'https://www.youtube.com/tv', None,
+            note='Extracting OAuth credentials',
+            errnote='Failed to download YouTube TV page'
+        )
+
+        # Extract the JavaScript that contains the OAuth credentials
+        js_code = self._search_regex(
+            r'<script[^>]+src="([^"]+base\.js)"',
+            webpage, 'base.js url', fatal=True
+        )
+        js_url = f'https://www.youtube.com{js_code}'
+        js_content = self._download_webpage(
+            js_url, None, note='Downloading base.js',
+            errnote='Failed to download base.js'
+        )
+
+        # Extract CLIENT_ID
+        self._CLIENT_ID = self._search_regex(
+            r'CLIENT_ID:"([\w\-\.]+)"',
+            js_content, 'client id', fatal=True
+        )
+
+        # Extract CLIENT_SECRET
+        self._CLIENT_SECRET = self._search_regex(
+            r'CLIENT_SECRET:"([\w\-]+)"',
+            js_content, 'client secret', fatal=True
+        )
+
+        # Extract SCOPES
+        scopes = re.findall(r'SCOPE:\[(.*?)\]', js_content)
+        if scopes:
+            self._SCOPES = ' '.join(eval(scopes[0]))
+        else:
+            self._SCOPES = _SCOPES  # Fallback to the default scopes
+            
     def store_token(self, token_data):
         self.cache.store('youtube-oauth2', 'token_data', token_data)
         self._TOKEN_DATA = token_data
