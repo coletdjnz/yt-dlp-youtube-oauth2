@@ -12,7 +12,7 @@ from yt_dlp.extractor.youtube import YoutubeBaseInfoExtractor
 import importlib
 import inspect
 
-_EXCLUDED_IES = ('YoutubeBaseInfoExtractor', 'YoutubeConsentRedirectIE', 'YoutubeFavouritesIE', 'YoutubeTabBaseInfoExtractor')
+_EXCLUDED_IES = ('YoutubeBaseInfoExtractor', 'YoutubeTabBaseInfoExtractor')
 
 YOUTUBE_IES = filter(
     lambda member: issubclass(member[1], YoutubeBaseInfoExtractor) and member[0] not in _EXCLUDED_IES,
