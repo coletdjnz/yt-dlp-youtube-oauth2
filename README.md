@@ -49,7 +49,7 @@ For more locations and methods, see [installing yt-dlp plugins](https://github.c
 
 If installed correctly, you should see the oauth2 YouTube extractor plugin overrides in `yt-dlp -v` output:
 
-    [debug] Extractor Plugins: oauth2 (YoutubeIE), outh2 (Youtube...), ...
+    [debug] Extractor Plugins: oauth2 (YoutubeIE), oauth2 (Youtube...), ...
 
 ## Usage
 
