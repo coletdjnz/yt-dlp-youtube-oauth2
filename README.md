@@ -2,7 +2,7 @@
 
 This repository contains a plugin package that adds support for logging into YouTube with OAuth2 to [yt-dlp's](https://github.com/yt-dlp/yt-dlp#readme) YouTube Extractors. 
 
-Please note: **This is experimental and may break at any time!!**.
+Please note: **This plugin is experimental and may break at any time!**.
 
 For general plugin support, please see the yt-dlp discord server as responses may be slow here.
 
@@ -15,7 +15,7 @@ If yt-dlp is installed through `pip` or `pipx`, you can install the plugin with 
 ### pip/pipx
 
 > [!IMPORTANT]
-> This package is **not** published on PyPI. Any package claiming to be this plugin on PyPI is not official.
+> This package is **not** currently published on PyPI. Any package claiming to be this plugin on PyPI is not official.
 
 pip:
 ```
@@ -49,7 +49,7 @@ For more locations and methods, see [installing yt-dlp plugins](https://github.c
 
 If installed correctly, you should see the oauth2 YouTube extractor plugin overrides in `yt-dlp -v` output:
 
-    [debug] Extractor Plugins:  oauth2 (YoutubeIE), outh2(Youtube...), ...
+    [debug] Extractor Plugins: oauth2 (YoutubeIE), outh2 (Youtube...), ...
 
 ## Usage
 
