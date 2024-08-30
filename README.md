@@ -10,12 +10,12 @@ For general plugin support, please see the yt-dlp discord server as responses ma
 
 **Requires yt-dlp `2024.8.13.232739 (nightly)` or above.**
 
-If yt-dlp is installed through `pip` or `pipx`, you can install the plugin with the following:
-
 ### pip/pipx
 
 > [!IMPORTANT]
 > This package is **not** currently published on PyPI. Any package claiming to be this plugin on PyPI is not official.
+
+If yt-dlp is installed through `pip` or `pipx`, you can install the plugin with the following:
 
 pip:
 ```
