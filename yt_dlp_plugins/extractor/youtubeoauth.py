@@ -12,8 +12,10 @@ from yt_dlp.extractor.youtube import YoutubeBaseInfoExtractor
 import importlib
 import inspect
 
+_EXCLUDED_IES = ('YoutubeBaseInfoExtractor', 'YoutubeTabBaseInfoExtractor')
+
 YOUTUBE_IES = filter(
-    lambda member: issubclass(member[1], YoutubeBaseInfoExtractor),
+    lambda member: issubclass(member[1], YoutubeBaseInfoExtractor) and member[0] not in _EXCLUDED_IES,
     inspect.getmembers(importlib.import_module('yt_dlp.extractor.youtube'), inspect.isclass)
 )
 
@@ -157,10 +159,18 @@ for _, ie in YOUTUBE_IES:
         _NETRC_MACHINE = 'youtube'
         _use_oauth2 = False
 
+        # Remove any default *_creator clients as they do not support oauth
+        _OAUTH2_UNSUPPORTED_CLIENTS = ('web_creator', 'android_creator', 'ios_creator')
+        # Additional clients to add when using oauth
+        _OAUTH2_CLIENTS = ('mweb', )
+
         def _perform_login(self, username, password):
             if username == 'oauth2':
                 self._use_oauth2 = True
                 self.initialize_oauth()
+                self._DEFAULT_CLIENTS = tuple(
+                    c for c in getattr(self, '_DEFAULT_CLIENTS', []) if c not in self._OAUTH2_UNSUPPORTED_CLIENTS
+                ) + self._OAUTH2_CLIENTS
 
         def _create_request(self, *args, **kwargs):
             request = super()._create_request(*args, **kwargs)
