@@ -1,0 +1,90 @@
+name: Create release
+on: [workflow_dispatch]
+
+jobs:
+  release:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.8"
+
+    - name: Install Hatch
+      run: pipx install hatch
+
+    - name: Set variables
+      id: set_variables
+      run: |
+        tag="$(git describe --tags --abbrev=0)"
+        echo "::group::Variables"
+        cat << EOF | tee -a "$GITHUB_OUTPUT"
+        tag=${tag}
+        version=v$(hatch project metadata | jq -r .version)
+        EOF
+        echo "::endgroup::"
+    - name: Bundle and create release
+      env:
+        GH_TOKEN: ${{ github.token }}
+        tag: ${{ steps.set_variables.outputs.tag }}
+        version: ${{ steps.set_variables.outputs.version }}
+      if: |
+        env.tag != env.version
+      run: |
+        project_name="$(hatch project metadata | jq -r .name)"
+        sources="$(\
+          hatch run default:pip list --verbose --format json \
+          | jq -r '.[] | select(.editable_project_location == null) | "\(.name);\(.location)"' \
+        )"
+        echo "::group::Dependencies"
+        printf '%s\n' "${sources}"
+        echo "::endgroup::"
+        mkdir bundle/
+        cp -r yt_dlp_plugins bundle/
+        while IFS=';' read -r name path; do
+          if [[ ! "${name}" =~ ^(pip|setuptools|wheel|yt-dlp)$ ]]; then
+            package_name="$(tr '[:upper:]' '[:lower:]' <<<"${name}" | sed 's/-/_/g')"
+            cp -r "${path}/${package_name}" bundle/
+          fi
+        done <<<"${sources}"
+        cd bundle/
+        find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
+        zip -9 --recurse-paths "${project_name}" *
+        gh release create "${version}" --latest \
+          --title "${project_name} ${version}" \
+          "${project_name}.zip"
+#  release_pypi:
+#    runs-on: ubuntu-latest
+#    permissions:
+#      id-token: write  # mandatory for trusted publishing
+#
+#    steps:
+#      - uses: actions/checkout@v4
+#        with:
+#          fetch-depth: 0
+#      - uses: actions/setup-python@v5
+#        with:
+#          python-version: "3.10"
+#
+#      - name: Install dependencies
+#        run: |
+#          python -m pip install --upgrade pip
+#          pip install build hatchling
+#
+#      - name: Build
+#        run: |
+#          rm -rf dist/*
+#          printf '%s\n\n' \
+#            'Official repository: <https://github.com/coletdjnz/yt-dlp-youtube-oauth2>' > ./README.md.new
+#          cat ./README.md >> ./README.md.new && mv -f ./README.md.new ./README.md
+#          python -m build --no-isolation .
+#
+#      - name: Publish to PyPI
+#        uses: pypa/gh-action-pypi-publish@release/v1
+#        with:
+#          verbose: true
