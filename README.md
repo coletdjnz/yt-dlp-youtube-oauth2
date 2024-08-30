@@ -6,6 +6,13 @@ Please note: **This plugin is experimental and may break at any time!**.
 
 For general plugin support, please see the yt-dlp discord server as responses may be slow here.
 
+* [Installation](#installation)
+  * [pip/pipx](#pippipx)
+  * [Manual install](#manual-install)
+* [Usage](#usage)
+  * [Enabling](#enabling)
+  * [Logging in](#logging-in-)
+
 ## Installation
 
 **Requires yt-dlp `2024.8.13.232739 (nightly)` or above.**
