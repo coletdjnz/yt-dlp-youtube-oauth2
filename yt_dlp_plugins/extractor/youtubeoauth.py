@@ -178,6 +178,9 @@ for _, ie in YOUTUBE_IES:
                 self._DEFAULT_CLIENTS = tuple(
                     c for c in getattr(self, '_DEFAULT_CLIENTS', []) if c not in self._OAUTH2_UNSUPPORTED_CLIENTS
                 ) + self._OAUTH2_CLIENTS
+                return
+
+            return super()._perform_login(username, password)
 
         def _create_request(self, *args, **kwargs):
             request = super()._create_request(*args, **kwargs)
