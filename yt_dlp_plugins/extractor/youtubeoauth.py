@@ -19,7 +19,7 @@ YOUTUBE_IES = filter(
     inspect.getmembers(importlib.import_module('yt_dlp.extractor.youtube'), inspect.isclass)
 )
 
-__VERSION__ = '2024.08.31.1'
+__VERSION__ = '2024.09.14'
 
 # YouTube TV (TVHTML5)
 _CLIENT_ID = '861556708454-d6dlm3lh05idd8npek18k6be8ba3oc68.apps.googleusercontent.com'

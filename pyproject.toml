@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "yt-dlp-youtube-oauth2"
-version = "2024.08.31.1"
+version = "2024.09.14"
 readme = "README.md"
 requires-python = ">=3.8"
 license = "Unlicense"
