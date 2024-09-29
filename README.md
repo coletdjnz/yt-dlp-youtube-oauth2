@@ -15,7 +15,7 @@ For general plugin support, please see the yt-dlp discord server as responses ma
 
 ## Installation
 
-**Requires yt-dlp `2024.8.13.232739 (nightly)` or above.**
+**Requires yt-dlp `2024.09.27` or above.**
 
 ### pip/pipx
 
