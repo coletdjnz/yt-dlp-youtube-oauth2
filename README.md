@@ -4,6 +4,9 @@ This repository contains a plugin package that adds support for logging into You
 
 Please note: **This plugin is experimental and may break at any time!**.
 
+> [!NOTE]
+> This plugin is in a maintenance-only state. Official support for OAuth2 in yt-dlp is being worked on. See https://github.com/yt-dlp/yt-dlp/pull/11001.
+
 For general plugin support, please see the yt-dlp discord server as responses may be slow here.
 
 * [Installation](#installation)
