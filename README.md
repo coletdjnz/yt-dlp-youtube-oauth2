@@ -3,6 +3,11 @@
 > [!CAUTION]
 > **This plugin is obsolete and no longer maintained!** Official support for logging into YouTube with OAuth in yt-dlp was added in the [2024.10.22](https://github.com/yt-dlp/yt-dlp/releases/tag/2024.10.22) release.
 > See the [yt-dlp wiki](https://github.com/yt-dlp/yt-dlp/wiki/Extractors#logging-in-with-oauth) on how to use the official OAuth implementation.
+> 
+> To uninstall this plugin:
+> - pip: `pip uninstall yt-dlp-youtube-oauth2`
+> - pipx: `pipx uninject yt-dlp yt-dlp-youtube-oauth2`
+> - manual: delete the plugin zip or files where you installed them
 
 <br>
 
