@@ -1,11 +1,16 @@
 ## YouTube OAuth2 for yt-dlp
 
+> [!CAUTION]
+> **This plugin is obsolete and no longer maintained!** Official support for logging into YouTube with OAuth in yt-dlp was added in the [2024.10.22](https://github.com/yt-dlp/yt-dlp/releases/tag/2024.10.22) release.
+> See the [yt-dlp wiki](https://github.com/yt-dlp/yt-dlp/wiki/Extractors#logging-in-with-oauth) on how to use the official OAuth implementation.
+
+<br>
+
 This repository contains a plugin package that adds support for logging into YouTube with OAuth2 to [yt-dlp's](https://github.com/yt-dlp/yt-dlp#readme) YouTube Extractors. 
 
 Please note: **This plugin is experimental and may break at any time!**.
 
-> [!NOTE]
-> This plugin is in a maintenance-only state. Official support for OAuth2 in yt-dlp is being worked on. See https://github.com/yt-dlp/yt-dlp/pull/11001.
+
 
 For general plugin support, please see the yt-dlp discord server as responses may be slow here.
 
@@ -14,7 +19,7 @@ For general plugin support, please see the yt-dlp discord server as responses ma
   * [Manual install](#manual-install)
 * [Usage](#usage)
   * [Enabling](#enabling)
-  * [Logging in](#logging-in-)
+  * [Logging in](#logging-in)
 
 ## Installation
 
