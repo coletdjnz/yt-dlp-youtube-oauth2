@@ -19,7 +19,7 @@ YOUTUBE_IES = filter(
     inspect.getmembers(importlib.import_module('yt_dlp.extractor.youtube'), inspect.isclass)
 )
 
-__VERSION__ = '2024.09.14'
+__VERSION__ = '2024.10.29'
 
 # YouTube TV (TVHTML5)
 _CLIENT_ID = '861556708454-d6dlm3lh05idd8npek18k6be8ba3oc68.apps.googleusercontent.com'
@@ -33,6 +33,16 @@ class YouTubeOAuth2Handler(InfoExtractor):
         super().set_downloader(downloader)
         if downloader:
             downloader.write_debug(f'YouTube OAuth2 plugin version {__VERSION__}', only_once=True)
+            downloader.report_warning((
+                'The YouTube OAuth2 plugin is obsolete! Official support for logging into YouTube with OAuth in '
+                'yt-dlp was added in the 2024.10.22 release. \n'
+                'See  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#logging-in-with-oauth  for how to use '
+                'the official OAuth implementation.\n\n'
+                'To uninstall the plugin:\n\n'
+                'pip: pip uninstall yt-dlp-youtube-oauth2\n'
+                'pipx: pipx uninject yt-dlp yt-dlp-youtube-oauth2\n'
+                'manual: delete the plugin zip or files where you installed them\n'
+            ), only_once=True)
 
     def store_token(self, token_data):
         self.cache.store('youtube-oauth2', 'token_data', token_data)
